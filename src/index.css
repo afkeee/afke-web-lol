@@ -1,0 +1,361 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+:root {
+  --bg-dark: #000000;
+  --loader-width: 176px;
+  --loader-height: 112px;
+  
+  --animation-duration: 0.6s;
+  --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  height: 95vh;
+  overflow: scroll;
+}
+
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body,
+#root {
+  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-x: none;
+  touch-action: pan-y pinch-zoom;
+  position: relative;
+}
+
+body {
+  font-family: "Reddit Sans", ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--bg-dark);
+  color: #e9e9e9;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
+}
+
+.bg-waves {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(40% 60% at 10% 20%, rgba(255, 255, 255, 0.02), transparent 20%),
+    radial-gradient(40% 60% at 80% 80%, rgba(255, 255, 255, 0.02), transparent 20%);
+  filter: blur(40px) saturate(70%);
+}
+
+.section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.container-scroll {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scroll-snap-type: both mandatory;
+  height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  touch-action: pan-y pinch-zoom;
+}
+
+.container-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+.sidebar-visible {
+  transform: translateY(-50%);
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-hidden {
+  transform: translateY(-50%) translateX(20px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: .25em;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-item .text {
+  text-align: right;
+}
+
+.sidebar-item .arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s ease;
+  color: #ff9f48;
+}
+
+.sidebar-item.active .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sidebar-item:hover .arrow {
+  opacity: 0.6;
+  transform: translateX(0);
+}
+
+.sidebar-item.active {
+  font-weight: bold;
+  color: #ff9f48;
+}
+
+.sidebar-item:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6), inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: 100vh;
+    max-width: 100vw;
+    padding: 0;
+  }
+  
+  .section {
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  main {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .loader-gauss,
+  .container-scroll {
+    overscroll-behavior-x: none;
+    touch-action: pan-y pinch-zoom;
+  }
+}
+
+.container-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+.loader-gauss {
+  background: rgba(0,0,0,0.35);
+  mix-blend-mode: normal;
+}
+
+.border-tracer {
+  top: 8px;
+  left: 8px;
+  z-index: 40;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 1px 2px rgba(255,255,255,0.06) inset;
+}
+
+.border-tracer-top {
+  width: 0%;
+  transform-origin: left center;
+}
+
+.border-tracer-right {
+  height: 0%;
+  transform-origin: top center;
+}
+
+.border-tracer-bottom {
+  width: 0%;
+  transform-origin: right center;
+}
+
+.border-tracer-left {
+  height: 0%;
+  transform-origin: bottom center;
+}
+
+.animate-tracer-top {
+  animation: fill-top 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+.animate-tracer-right {
+  animation: fill-right 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.1s forwards;
+}
+
+.animate-tracer-bottom {
+  animation: fill-bottom 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s forwards;
+}
+
+.animate-tracer-left {
+  animation: fill-left 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.3s forwards;
+}
+
+@keyframes fill-top {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: calc(100% - 4px);
+  }
+}
+
+@keyframes fill-right {
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: calc(100% - 4px);
+  }
+}
+
+@keyframes fill-bottom {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: calc(100% - 4px);
+  }
+}
+
+@keyframes fill-left {
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: calc(100% - 4px);
+  }
+}
+
+.loader-text {
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 520ms cubic-bezier(0.72,-0.63, 0, 1.31), opacity 520ms cubic-bezier(0.72,-0.63, 0, 1.31);
+}
+
+.loader-text.text-done {
+  transform: scale(1.5);
+  opacity: 1;
+}
+
+.loader-motion-blur {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.loader-done {
+  animation: loader-complete 800ms cubic-bezier(0.72,-0.63, 0, 1.31) forwards;
+}
+
+.loader-done .border-tracer-top,
+.loader-done .border-tracer-right,
+.loader-done .border-tracer-bottom,
+.loader-done .border-tracer-left {
+  animation: none;
+  opacity: 0.9;
+}
+
+.loader-done .border-tracer-top { width: calc(100% - 4px); }
+.loader-done .border-tracer-right { height: calc(100% - 4px); }
+.loader-done .border-tracer-bottom { width: calc(100% - 4px); }
+.loader-done .border-tracer-left { height: calc(100% - 4px); }
+
+@keyframes loader-complete {
+  0% { 
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+  60% { 
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+  100% { 
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.edge-animate-top,
+.edge-animate-right,
+.edge-animate-bottom,
+.edge-animate-left {
+  display: none;
+}
+
+.loader-gauss,
+.loader-fill,
+.loader-text {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.section-anim {
+  transform-origin: center center;
+  will-change: transform;
+  pointer-events: auto;
+}
+
+.fade-out-slow {
+  transition: opacity 8s ease-out;
+}
+
